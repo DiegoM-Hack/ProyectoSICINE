@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="core-3.5.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Desktop/DriversMongo/core-3.5.2.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/DriversMongo/javase-3.5.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

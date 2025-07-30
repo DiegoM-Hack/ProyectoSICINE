@@ -1,0 +1,146 @@
+package Formularios;
+
+import Modelos.Pelicula;
+import Servicios.PeliculaService;
+import Utilidades.Estilos;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+
+public class BuscarPelicula extends JPanel {
+    private JPanel principal;
+    private JTextField nombrePelicula;
+    private JButton buscarButton;
+    private JTable informacionPelicula;
+    private JButton eliminarButton;
+
+
+    private PeliculaService servicio = new PeliculaService();
+
+    public BuscarPelicula() {
+        JFrame frame = new JFrame("Buscar Pelicula");
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(principal);
+        frame.setSize(500, 200);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
+
+        Estilos.estiloPanel(principal);
+        Estilos.aplicarEstiloVentana(frame);
+        Estilos.estilizarLabels(principal, Color.WHITE, new Font("Arial", Font.BOLD, 14));
+
+
+        informacionPelicula.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2 && informacionPelicula.getSelectedRow() != -1) {
+                    int fila = informacionPelicula.getSelectedRow();
+                    String titulo = (String) informacionPelicula.getValueAt(fila, 0); // columna del título
+
+                    PeliculaService servicio = new PeliculaService(); // o tu instancia existente
+                    List<Pelicula> resultados = servicio.buscarPeliculasPorTitulo(titulo);
+
+                    if (!resultados.isEmpty()) {
+                        Pelicula seleccionada = resultados.get(0);
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Sinopsis:\n" + seleccionada.getSinopsis(),
+                                "Sinopsis de " + seleccionada.getTitulo(),
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se encontró la sinopsis para esa película.");
+                    }
+                }
+            }
+        });
+
+
+        eliminarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada = informacionPelicula.getSelectedRow();
+
+                if (filaSeleccionada == -1) {
+                    JOptionPane.showMessageDialog(principal, "Seleccione una película para eliminar.");
+                    return;
+                }
+
+                String titulo = (String) informacionPelicula.getValueAt(filaSeleccionada, 0);
+
+                int confirmacion = JOptionPane.showConfirmDialog(
+                        principal,
+                        "¿Está seguro que desea eliminar la película '" + titulo + "'?",
+                        "Confirmar eliminación",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (confirmacion == JOptionPane.YES_OPTION) {
+                    boolean eliminado = servicio.eliminarPeliculaPorTitulo(titulo);
+                    if (eliminado) {
+                        JOptionPane.showMessageDialog(principal, "Película eliminada exitosamente.");
+                        ((DefaultTableModel) informacionPelicula.getModel()).removeRow(filaSeleccionada);
+                    } else {
+                        JOptionPane.showMessageDialog(principal, "No se pudo eliminar la película.");
+                    }
+                }
+            }
+        });
+
+
+
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String tituloBuscado = nombrePelicula.getText().trim();
+                if (tituloBuscado.isEmpty()) {
+                    JOptionPane.showMessageDialog(principal, "Ingrese un título para buscar.");
+                    return;
+                }
+
+                List<Pelicula> resultados = servicio.buscarPeliculasPorTitulo(tituloBuscado);
+                if (resultados.isEmpty()) {
+                    JOptionPane.showMessageDialog(principal, "Película no encontrada.");
+                } else {
+                    mostrarResultados(resultados);
+                }
+            }
+        });
+    }
+
+    private void mostrarResultados(List<Pelicula> peliculas) {
+        String[] columnas = {"Título", "Género", "Duración", "Clasificación", "Director", "Año"};
+
+        DefaultTableModel model = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Hace que la tabla no sea editable nuevamente
+            }
+        };
+
+        for (Pelicula peli : peliculas) {
+            Object[] fila = {
+                    peli.getTitulo(),
+                    peli.getGenero(),
+                    peli.getDuracion(),
+                    peli.getClasificacion(),
+                    peli.getDirector(),
+                    peli.getAnio()
+            };
+            model.addRow(fila);
+        }
+
+        informacionPelicula.setModel(model);
+    }
+
+    public JPanel getPanel() {
+        return principal;
+    }
+}
+
