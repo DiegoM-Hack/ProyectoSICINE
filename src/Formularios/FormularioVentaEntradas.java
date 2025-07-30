@@ -121,6 +121,7 @@ public class FormularioVentaEntradas extends JFrame {
                 generarBoleto(venta);
                 generarYGuardarQR(venta);
                 boletoService.guardarBoleto(venta, codigoQR);
+                Estilos.personalizarJOptionPane();
                 JOptionPane.showMessageDialog(panelPrincipal, "Venta registrada. Total: $" + total);
                 dispose();
 
@@ -176,7 +177,7 @@ public class FormularioVentaEntradas extends JFrame {
     private void generarYGuardarQR(Venta venta) {
         try {
             String contenidoQR = venta.getCodigoQR();
-            BufferedImage qr = QRUtil.generarQR(comoTextoQR(venta), 200, 200);
+            BufferedImage qr = QRUtil.generarQR(comoTextoQR(venta), 200, 350);
 
             // Generar imagen completa
             BufferedImage boletoConQR = generarImagenBoletoConQR(venta, qr);
@@ -230,8 +231,9 @@ public class FormularioVentaEntradas extends JFrame {
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(etiqueta, BorderLayout.CENTER);
-        panel.add(imagen, BorderLayout.EAST); // o SOUTH si quieres debajo
-
+        panel.add(imagen, BorderLayout.SOUTH); // o SOUTH si quieres debajo
+        Estilos.estiloPanel(panel);
+        Estilos.personalizarJOptionPane();
         JOptionPane.showMessageDialog(panelPrincipal, panel, "Boleto generado", JOptionPane.INFORMATION_MESSAGE);
     }
 

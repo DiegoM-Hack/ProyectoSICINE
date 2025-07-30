@@ -39,7 +39,7 @@ public class HistorialVentas extends JFrame {
 
         botonCerrar.addActionListener(e -> {
             dispose();
-            new FormularioCRUTCajero(usuario);
+            new FormularioCRUTCajero(usuario).setVisible(true);
         });
     }
 

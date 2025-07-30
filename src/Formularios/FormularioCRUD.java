@@ -65,8 +65,9 @@ public class FormularioCRUD extends JFrame {
         gestionarUsuariosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new FormularioGestionUsuarios(usuario).setVisible(true);
                 dispose();
+                new FormularioGestionUsuarios(usuario).setVisible(true);
+
             }
         });
 

@@ -58,7 +58,7 @@ public class FormularioSalas extends JFrame {
                     SwingUtilities.getWindowAncestor(panel).dispose();
 
                     // Volver al formulario CRUD
-                    new FormularioCRUD(null);
+                    new FormularioCRUD(usuario);
 
                 } else {
                     JOptionPane.showMessageDialog(panel, "Error al guardar la sala.","Error", JOptionPane.ERROR_MESSAGE);
