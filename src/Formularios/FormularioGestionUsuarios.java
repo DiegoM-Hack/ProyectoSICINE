@@ -65,17 +65,18 @@ public class FormularioGestionUsuarios extends JFrame {
                 String rol = (String) comboRolAgregar.getSelectedItem();
 
                 if (usuario.isEmpty() || clave.isEmpty()) {
-                    JOptionPane.showMessageDialog(panelPrincipal, "Por favor, completa todos los campos.");
+                    JOptionPane.showMessageDialog(panelPrincipal, "Por favor, completa todos los campos.","Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 Usuario nuevoUsuario = new Usuario(usuario, clave, rol);
                 if (usuarioService.agregarUsuario(nuevoUsuario)) {
+                    Estilos.personalizarJOptionPane();
                     JOptionPane.showMessageDialog(panelPrincipal, "Modelos.Usuario agregado correctamente.");
                     campoUsuarioAgregar.setText("");
                     campoClaveAgregar.setText("");
                 } else {
-                    JOptionPane.showMessageDialog(panelPrincipal, "El usuario ya existe o hubo un error.");
+                    JOptionPane.showMessageDialog(panelPrincipal, "El usuario ya existe o hubo un error.","Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -86,19 +87,21 @@ public class FormularioGestionUsuarios extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String usuario = campoUsuarioEliminar.getText();
                 if (usuario.isEmpty()) {
+                    Estilos.personalizarJOptionPane();
                     JOptionPane.showMessageDialog(panelPrincipal, "Ingresa el nombre de usuario a eliminar.");
                     return;
                 }
 
-                int confirm = JOptionPane.showConfirmDialog(panelPrincipal, "¿Estás seguro de eliminar al usuario?", "Confirmar", JOptionPane.YES_NO_OPTION);
+                Estilos.personalizarJOptionPane();
+                int confirm = JOptionPane.showConfirmDialog(panelPrincipal, "¿Estás seguro de eliminar al usuario?");
                 if (confirm == JOptionPane.YES_OPTION) {
                     if (usuarioService.eliminarUsuario(usuario)) {
-                        JOptionPane.showMessageDialog(panelPrincipal, "Modelos.Usuario eliminado.");
+                        JOptionPane.showMessageDialog(panelPrincipal, "Usuario eliminado.");
                         campoUsuarioEliminar.setText("");
                         cargarUsuarios(); // Refrescar tabla
 
                     } else {
-                        JOptionPane.showMessageDialog(panelPrincipal, "No se pudo eliminar al usuario.");
+                        JOptionPane.showMessageDialog(panelPrincipal, "No se pudo eliminar al usuario.","Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -126,19 +129,21 @@ public class FormularioGestionUsuarios extends JFrame {
                 String nuevoRol = (String) comboNuevoRol.getSelectedItem();
 
                 if (usuario.isEmpty()) {
-                    JOptionPane.showMessageDialog(panelPrincipal, "Ingresa el nombre del usuario.");
+                    Estilos.personalizarJOptionPane();
+                    JOptionPane.showMessageDialog(panelPrincipal, "Ingresa el nombre del usuario.","Pregunta", JOptionPane.QUESTION_MESSAGE);
                     return;
                 }
 
                 boolean actualizado = usuarioService.actualizarUsuario(usuario, nuevaClave, nuevoRol);
                 if (actualizado) {
-                    JOptionPane.showMessageDialog(panelPrincipal, "Modelos.Usuario actualizado correctamente.");
+                    Estilos.personalizarJOptionPane();
+                    JOptionPane.showMessageDialog(panelPrincipal, "Usuario actualizado correctamente.");
                     campoUsuarioActualizar.setText("");
                     campoNuevaClave.setText("");
                     cargarUsuarios(); // Refrescar tabla
 
                 } else {
-                    JOptionPane.showMessageDialog(panelPrincipal, "Error al actualizar usuario.");
+                    JOptionPane.showMessageDialog(panelPrincipal, "Error al actualizar usuario.","Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -175,7 +180,7 @@ public class FormularioGestionUsuarios extends JFrame {
 
     private void cargarUsuarios() {
         List<Usuario> lista = usuarioService.obtenerTodos();
-        String[] columnas = {"Modelos.Usuario", "Rol"};
+        String[] columnas = {"Usuario", "Rol"};
         String[][] datos = new String[lista.size()][2];
 
         for (int i = 0; i < lista.size(); i++) {

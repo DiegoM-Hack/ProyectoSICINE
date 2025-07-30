@@ -81,7 +81,7 @@ public class ProgramarFunciones extends JFrame {
         Date hora = (Date) spinnerHora.getValue();
 
         if (pelicula == null || sala == null || fecha == null || hora == null) {
-            JOptionPane.showMessageDialog(panelPrincipal, "Todos los campos deben estar llenos.");
+            JOptionPane.showMessageDialog(panelPrincipal, "Todos los campos deben estar llenos.","Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -95,7 +95,8 @@ public class ProgramarFunciones extends JFrame {
             new FormularioCRUD(usuario).setVisible(true);
 
         } else {
-            JOptionPane.showMessageDialog(panelPrincipal, "Error al registrar función.");
+            Estilos.personalizarJOptionPane();
+            JOptionPane.showMessageDialog(panelPrincipal, "Error al registrar función.","Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -106,7 +107,8 @@ public class ProgramarFunciones extends JFrame {
         Date hora = (Date) spinnerHora.getValue();
 
         if (pelicula == null || sala == null || fecha == null || hora == null) {
-            JOptionPane.showMessageDialog(panelPrincipal, "Todos los campos deben estar llenos.");
+            Estilos.personalizarJOptionPane();
+            JOptionPane.showMessageDialog(panelPrincipal, "Todos los campos deben estar llenos.","Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -142,7 +144,7 @@ public class ProgramarFunciones extends JFrame {
         comboPeliculas.removeAllItems();
         List<Pelicula> peliculas = peliculaService.obtenerTodasLasPeliculas();
         if (peliculas.isEmpty()) {
-            JOptionPane.showMessageDialog(panelPrincipal, "No hay películas registradas.");
+            JOptionPane.showMessageDialog(panelPrincipal, "No hay películas registradas.","Message", JOptionPane.QUESTION_MESSAGE);
         } else {
             for (Pelicula peli : peliculas) {
                 comboPeliculas.addItem(peli.getTitulo());
