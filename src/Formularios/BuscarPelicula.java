@@ -37,6 +37,7 @@ public class BuscarPelicula extends JPanel {
         Estilos.estiloPanel(principal);
         Estilos.aplicarEstiloVentana(frame);
         Estilos.estilizarLabels(principal, Color.WHITE, new Font("Arial", Font.BOLD, 14));
+        Estilos.estilizarTabla(informacionPelicula);
 
 
         informacionPelicula.addMouseListener(new java.awt.event.MouseAdapter() {

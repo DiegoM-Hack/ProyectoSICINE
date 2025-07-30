@@ -72,7 +72,7 @@ public class FormularioGestionUsuarios extends JFrame {
                 Usuario nuevoUsuario = new Usuario(usuario, clave, rol);
                 if (usuarioService.agregarUsuario(nuevoUsuario)) {
                     Estilos.personalizarJOptionPane();
-                    JOptionPane.showMessageDialog(panelPrincipal, "Modelos.Usuario agregado correctamente.");
+                    JOptionPane.showMessageDialog(panelPrincipal, "Usuario agregado correctamente.");
                     campoUsuarioAgregar.setText("");
                     campoClaveAgregar.setText("");
                 } else {
