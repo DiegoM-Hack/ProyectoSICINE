@@ -86,6 +86,4 @@ public class VentaService {
         }
         return lista;
     }
-
-
 }

@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ProyectoFinal:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ProyectoFinal_jar</output-path>
+    <root id="archive" name="ProyectoFinal.jar">
+      <element id="module-output" name="ProyectoFinal" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/DriversMongo/jcalendar-1.4/lib/jcalendar-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/DriversMongo/core-3.5.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/DriversMongo/javase-3.5.2.jar" path-in-jar="/" />
+      <element id="library" level="project" name="api" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/DriversMongo/bson-5.5.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/DriversMongo/mongodb-driver-core-5.5.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/DriversMongo/mongodb-driver-sync-5.5.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/DriversMongo/slf4j-api-2.0.17.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

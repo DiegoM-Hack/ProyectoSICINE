@@ -20,7 +20,7 @@ public class Pelicula {
         this.sinopsis = sinopsis;
         this.director = director;
         this.anio = anio;
-        //this.rutaImagen = rutaImagen; // NUEVO
+
     }
 
     // Getters y Setters
@@ -45,7 +45,4 @@ public class Pelicula {
     public int getAnio() { return anio; }
     public void setAnio(int anio) { this.anio = anio; }
 
-    // NUEVOS: Getter y Setter para la imagen
-    //public String getRutaImagen() { return rutaImagen; }
-    //public void setRutaImagen(String rutaImagen) { this.rutaImagen = rutaImagen; }
 }

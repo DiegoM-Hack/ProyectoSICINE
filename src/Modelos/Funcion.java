@@ -31,5 +31,5 @@ public class Funcion {
     public void setFechaHora(Date fechaHora) {
         this.fechaHora = fechaHora;
     }
-    // Getters y Setters
+
 }

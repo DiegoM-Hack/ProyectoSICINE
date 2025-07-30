@@ -33,8 +33,6 @@ public class Venta {
         this.codigoQR = generarContenidoQR();
     }
 
-
-
     public String generarContenidoQR() {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return "pelicula=" + pelicula +
