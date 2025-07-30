@@ -61,7 +61,7 @@ public class FormularioSalas extends JFrame {
                     new FormularioCRUD(null);
 
                 } else {
-                    JOptionPane.showMessageDialog(panel, "Error al guardar la sala.");
+                    JOptionPane.showMessageDialog(panel, "Error al guardar la sala.","Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

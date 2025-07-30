@@ -1,5 +1,4 @@
 package Formularios;
-import Utilidades.Utilidades;
 import Modelos.Pelicula;
 import Modelos.Usuario;
 import Servicios.PeliculaService;
@@ -7,6 +6,8 @@ import Utilidades.Estilos;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class FormularioAgregarPeliculas extends JFrame {
 
@@ -21,6 +22,7 @@ public class FormularioAgregarPeliculas extends JFrame {
     private JTextField directort;
     private JButton guardarButton;
     private JButton cancelarButton;
+    private JButton buscarButton;
 
     public FormularioAgregarPeliculas(Usuario usuario) {
         this.usuario = usuario;
@@ -69,6 +71,13 @@ public class FormularioAgregarPeliculas extends JFrame {
         pack(); // ajusta la ventana al tamaño preferido del contenido
         setLocationRelativeTo(null); // centrar
         setVisible(true);
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new BuscarPelicula(usuario);
+            }
+        });
     }
 
     private void guardarPelicula() {

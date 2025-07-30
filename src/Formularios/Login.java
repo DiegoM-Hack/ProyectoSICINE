@@ -52,7 +52,8 @@ public class Login extends JFrame {
                 dispose();
             } else {
                 Estilos.personalizarJOptionPane();
-                JOptionPane.showMessageDialog(principal, "Credenciales incorrectas.");
+                JOptionPane.showMessageDialog(principal, "Credenciales incorrectas.","Error", JOptionPane.ERROR_MESSAGE);
+
             }
         });
 
@@ -72,7 +73,7 @@ public class Login extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(Login::new);
+        SwingUtilities.invokeLater(()->new Login());
     }
 }
 

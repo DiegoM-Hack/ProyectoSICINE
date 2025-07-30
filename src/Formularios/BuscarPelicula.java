@@ -1,6 +1,7 @@
 package Formularios;
 
 import Modelos.Pelicula;
+import Modelos.Usuario;
 import Servicios.PeliculaService;
 import Utilidades.Estilos;
 
@@ -11,17 +12,19 @@ import java.awt.event.ActionListener;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
+
 public class BuscarPelicula extends JPanel {
     private JPanel principal;
     private JTextField nombrePelicula;
     private JButton buscarButton;
     private JTable informacionPelicula;
     private JButton eliminarButton;
-
-
+    private JButton cancelarButton;
+    private Usuario usuario;
     private PeliculaService servicio = new PeliculaService();
 
-    public BuscarPelicula() {
+    public BuscarPelicula(Usuario usuario) {
+        this.usuario = usuario;
         JFrame frame = new JFrame("Buscar Pelicula");
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,7 +58,7 @@ public class BuscarPelicula extends JPanel {
                                 JOptionPane.INFORMATION_MESSAGE
                         );
                     } else {
-                        JOptionPane.showMessageDialog(null, "No se encontró la sinopsis para esa película.");
+                        JOptionPane.showMessageDialog(null, "No se encontró la sinopsis para esa película.","Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -65,31 +68,10 @@ public class BuscarPelicula extends JPanel {
         eliminarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada = informacionPelicula.getSelectedRow();
+                eliminarPelicula();
+                frame.dispose();
+                new FormularioCRUD(usuario);
 
-                if (filaSeleccionada == -1) {
-                    JOptionPane.showMessageDialog(principal, "Seleccione una película para eliminar.");
-                    return;
-                }
-
-                String titulo = (String) informacionPelicula.getValueAt(filaSeleccionada, 0);
-
-                int confirmacion = JOptionPane.showConfirmDialog(
-                        principal,
-                        "¿Está seguro que desea eliminar la película '" + titulo + "'?",
-                        "Confirmar eliminación",
-                        JOptionPane.YES_NO_OPTION
-                );
-
-                if (confirmacion == JOptionPane.YES_OPTION) {
-                    boolean eliminado = servicio.eliminarPeliculaPorTitulo(titulo);
-                    if (eliminado) {
-                        JOptionPane.showMessageDialog(principal, "Película eliminada exitosamente.");
-                        ((DefaultTableModel) informacionPelicula.getModel()).removeRow(filaSeleccionada);
-                    } else {
-                        JOptionPane.showMessageDialog(principal, "No se pudo eliminar la película.");
-                    }
-                }
             }
         });
 
@@ -100,18 +82,58 @@ public class BuscarPelicula extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String tituloBuscado = nombrePelicula.getText().trim();
                 if (tituloBuscado.isEmpty()) {
+                    Estilos.personalizarJOptionPane();
                     JOptionPane.showMessageDialog(principal, "Ingrese un título para buscar.");
                     return;
                 }
 
+
                 List<Pelicula> resultados = servicio.buscarPeliculasPorTitulo(tituloBuscado);
                 if (resultados.isEmpty()) {
-                    JOptionPane.showMessageDialog(principal, "Película no encontrada.");
+                    JOptionPane.showMessageDialog(principal, "Película no encontrada.","Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     mostrarResultados(resultados);
                 }
             }
         });
+        cancelarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                new FormularioCRUD(usuario);
+            }
+        });
+    }
+
+    private void eliminarPelicula() {
+        int filaSeleccionada = informacionPelicula.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(principal, "Seleccione una película para eliminar.");
+            return;
+        }
+
+        String titulo = (String) informacionPelicula.getValueAt(filaSeleccionada, 0);
+
+        int confirmacion = JOptionPane.showConfirmDialog(
+                principal,
+                "¿Está seguro que desea eliminar la película '" + titulo + "'?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            boolean eliminado = servicio.eliminarPeliculaPorTitulo(titulo);
+            if (eliminado) {
+                JOptionPane.showMessageDialog(principal, "Película eliminada exitosamente.");
+                ((DefaultTableModel) informacionPelicula.getModel()).removeRow(filaSeleccionada);
+
+            } else {
+                Estilos.personalizarJOptionPane();
+                JOptionPane.showMessageDialog(principal, "No se pudo eliminar la película.","Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
     }
 
     private void mostrarResultados(List<Pelicula> peliculas) {
