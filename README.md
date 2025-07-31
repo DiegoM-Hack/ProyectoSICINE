@@ -25,11 +25,11 @@ bash
 Copiar
 Editar
 /src
-  ├── Modelos/
-  ├── Servicios/
-  ├── Formularios/
-  ├── Utilidades/
-  └── DataBase/
+├── Modelos/
+├── Servicios/
+├── Formularios/
+├── Utilidades/
+└── DataBase/
 Modelos/: Clases como Pelicula, Sala, Venta, Usuario, etc.
 
 Servicios/: Lógica para interactuar con MongoDB.
