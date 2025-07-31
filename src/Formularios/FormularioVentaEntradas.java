@@ -183,7 +183,7 @@ public class FormularioVentaEntradas extends JFrame {
             BufferedImage boletoConQR = generarImagenBoletoConQR(venta, qr);
 
             // Guardar como imagen PNG
-            String nombreArchivo = "C:\\Users\\User\\Desktop\\DriversMongo\\Boleto" + System.currentTimeMillis() + ".png";
+            String nombreArchivo = "C:\\Users\\User\\Desktop\\Boleto" + System.currentTimeMillis() + ".png";
             ImageIO.write(boletoConQR, "png", new File(nombreArchivo));
             System.out.println("Boleto guardado en: " + nombreArchivo);
 
