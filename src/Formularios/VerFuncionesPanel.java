@@ -16,7 +16,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Clase VerFuncionesPanel permite a los usuarios visualizar todas las funciones programadas en el sistema.
+ * Si el usuario tiene rol de administrador, puede eliminar funciones desde la interfaz.
+ * Aplica estilos personalizados definidos en la clase Estilos.
+ */
 public class VerFuncionesPanel extends JFrame {
+
     private JPanel panelPrincipal;
     private JTable tablaFunciones;
     private JButton botonEliminar;
@@ -26,9 +32,13 @@ public class VerFuncionesPanel extends JFrame {
     private FuncionService funcionService = new FuncionService();
     private Usuario usuario;
 
+    /**
+     * Constructor que inicializa la ventana de visualizacion de funciones.
+     * Carga la tabla de funciones y configura los permisos segun el rol del usuario.
+     * @param usuario Usuario autenticado que accede al formulario
+     */
     public VerFuncionesPanel(Usuario usuario) {
         this.usuario = usuario;
-
 
         setTitle("Buscar Funciones");
         setContentPane(panelPrincipal);
@@ -37,24 +47,24 @@ public class VerFuncionesPanel extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
 
-        // Inicializar modelo de tabla
+        // Modelo para la tabla de funciones
         modeloTabla = new DefaultTableModel(new Object[]{"Película", "Sala", "Fecha y Hora"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;
+                return false; // La tabla no debe permitir edicion directa
             }
         };
         tablaFunciones.setModel(modeloTabla);
 
-
-        // Ocultar botón si no es admin
+        // Solo los administradores pueden eliminar funciones
         if (!usuario.getRol().equalsIgnoreCase("administrador")) {
             botonEliminar.setVisible(false);
         }
 
         botonEliminar.addActionListener(e -> eliminarFuncionSeleccionada());
 
-        cargarFunciones();
+        cargarFunciones(); // Llenar tabla con datos de la base
+
         botonRegresar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,23 +74,23 @@ public class VerFuncionesPanel extends JFrame {
                 } else {
                     new FormularioCRUTCajero(usuario).setVisible(true);
                 }
-
             }
         });
 
+        // Estilos personalizados
         Estilos.estiloPanel(panelPrincipal);
         Estilos.estiloBoton(botonEliminar);
         Estilos.estiloBoton(botonRegresar);
         Estilos.aplicarEstiloVentana(this);
         Estilos.estilizarLabels(panelPrincipal, Color.WHITE, new Font("Arial", Font.BOLD, 14));
         Estilos.estilizarTabla(tablaFunciones);
-
-
-
     }
 
+    /**
+     * Carga todas las funciones desde la base de datos y las muestra en la tabla.
+     */
     private void cargarFunciones() {
-        modeloTabla.setRowCount(0); // limpiar tabla
+        modeloTabla.setRowCount(0); // Limpiar tabla
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
         List<Funcion> funciones = funcionService.obtenerTodasLasFunciones();
@@ -93,6 +103,10 @@ public class VerFuncionesPanel extends JFrame {
         }
     }
 
+    /**
+     * Elimina la funcion seleccionada en la tabla, si el usuario es administrador.
+     * Se solicita confirmacion al usuario antes de eliminar.
+     */
     private void eliminarFuncionSeleccionada() {
         int filaSeleccionada = tablaFunciones.getSelectedRow();
         if (filaSeleccionada == -1) {
@@ -117,7 +131,7 @@ public class VerFuncionesPanel extends JFrame {
 
                 if (funcionService.eliminarFuncion(funcion)) {
                     JOptionPane.showMessageDialog(this, "Función eliminada correctamente.");
-                    cargarFunciones();
+                    cargarFunciones(); // Actualizar tabla
                 } else {
                     JOptionPane.showMessageDialog(this, "Error al eliminar la función.");
                 }
@@ -128,7 +142,12 @@ public class VerFuncionesPanel extends JFrame {
         }
     }
 
+    /**
+     * Devuelve el panel principal del formulario, util para integracion externa.
+     * @return panel principal
+     */
     public JPanel getPanel() {
         return panelPrincipal;
     }
 }
+

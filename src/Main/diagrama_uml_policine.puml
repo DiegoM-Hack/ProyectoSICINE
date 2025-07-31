@@ -1,0 +1,99 @@
+
+@startuml PoliCine
+
+skinparam classAttributeIconSize 0
+
+package "Modelos" {
+    class Pelicula {
+        - titulo: String
+        - genero: String
+        - duracion: int
+        - clasificacion: String
+        - sinopsis: String
+        - director: String
+        - anio: int
+    }
+
+    class Sala {
+        - nombre: String
+        - numeroAsientos: int
+        - tipo: String
+    }
+
+    class Funcion {
+        - tituloPelicula: String
+        - sala: String
+        - fechaHora: Date
+    }
+
+    class Venta {
+        - pelicula: String
+        - sala: String
+        - fechaHoraFuncion: Date
+        - cantidadEntradas: int
+        - total: double
+        - fechaVenta: Date
+        - usuario: String
+        - codigoQR: String
+    }
+
+    class Usuario {
+        - usuario: String
+        - clave: String
+        - rol: String
+    }
+}
+
+package "Servicios" {
+    class PeliculaService
+    class SalaService
+    class FuncionService
+    class UsuarioService
+    class VentaService
+    class BoletoService
+}
+
+package "UI" {
+    class Login
+    class FormularioCRUD
+    class FormularioCRUTCajero
+    class FormularioAgregarPeliculas
+    class FormularioGestionUsuarios
+    class FormularioSalas
+    class FormularioVentaEntradas
+    class BuscarPelicula
+    class VerFuncionesPanel
+    class ProgramarFunciones
+    class HistorialVentas
+}
+
+package "Utils" {
+    class Estilos
+    class ConexionMongoDB
+}
+
+' Relaciones
+PeliculaService --> Pelicula
+SalaService --> Sala
+FuncionService --> Funcion
+UsuarioService --> Usuario
+VentaService --> Venta
+BoletoService --> Venta
+
+Login --> UsuarioService
+FormularioCRUD --> Usuario
+FormularioCRUTCajero --> Usuario
+FormularioAgregarPeliculas --> PeliculaService
+FormularioGestionUsuarios --> UsuarioService
+FormularioSalas --> SalaService
+FormularioVentaEntradas --> VentaService
+FormularioVentaEntradas --> BoletoService
+FormularioVentaEntradas --> SalaService
+BuscarPelicula --> PeliculaService
+VerFuncionesPanel --> FuncionService
+ProgramarFunciones --> PeliculaService
+ProgramarFunciones --> SalaService
+ProgramarFunciones --> FuncionService
+HistorialVentas --> VentaService
+
+@enduml

@@ -7,15 +7,25 @@ import Utilidades.Estilos;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Clase Login que representa la interfaz de inicio de sesion para los usuarios del sistema PoliCine.
+ * Permite autenticarse como administrador o cajero.
+ * Aplica estilos visuales personalizados desde la clase Estilos.
+ */
 public class Login extends JFrame {
+    /** Panel principal del formulario */
     private JPanel principal;
     private JTextField usuario;
     private JPasswordField Clave;
     private JButton ingresarButton;
     private JButton salirButton;
 
+    /** Servicio que gestiona la autenticacion de usuarios */
     private UsuarioService usuarioService = new UsuarioService();
 
+    /**
+     * Constructor que inicializa la interfaz de login y aplica los estilos visuales
+     */
     public Login() {
         setTitle("PoliCine");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,22 +70,36 @@ public class Login extends JFrame {
         salirButton.addActionListener(e -> System.exit(0));
     }
 
+    /**
+     * Muestra el panel de administrador tras autenticarse
+     * @param usuario Usuario autenticado con rol administrador
+     */
     private void mostrarPanelAdministrador(Usuario usuario) {
         new FormularioCRUD(usuario).setVisible(true);
     }
 
+    /**
+     * Muestra el panel de cajero tras autenticarse
+     * @param usuario Usuario autenticado con rol cajero
+     */
     private void mostrarPanelCajero(Usuario usuario) {
         new FormularioCRUTCajero(usuario).setVisible(true);
     }
 
+    /**
+     * Devuelve el panel principal (util en pruebas o integracion)
+     * @return panel principal
+     */
     public JPanel getPanel() {
         return principal;
     }
 
+    /**
+     * Metodo main que lanza la interfaz de login
+     */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(()->new Login());
+        SwingUtilities.invokeLater(() -> new Login());
     }
 }
-
 
 

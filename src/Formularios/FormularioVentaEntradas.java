@@ -17,7 +17,13 @@ import java.util.List;
 
 import static Utilidades.QRUtil.generarImagenBoletoConQR;
 
+/**
+ * Clase FormularioVentaEntradas permite a un cajero seleccionar una película y función,
+ * ingresar la cantidad de entradas, calcular el total, registrar la venta en la base de datos,
+ * generar un boleto con código QR y guardar dicho boleto como imagen.
+ */
 public class FormularioVentaEntradas extends JFrame {
+
     private JPanel panelPrincipal;
     private JComboBox<String> comboPeliculas;
     private JComboBox<String> comboFunciones;
@@ -31,7 +37,10 @@ public class FormularioVentaEntradas extends JFrame {
     private VentaService ventaService = new VentaService();
     private BoletoService boletoService = new BoletoService();
 
-
+    /**
+     * Constructor que inicializa la interfaz de venta de entradas.
+     * @param usuario Cajero autenticado que realiza la venta.
+     */
     public FormularioVentaEntradas(Usuario usuario) {
         this.usuario = usuario;
 
@@ -43,6 +52,7 @@ public class FormularioVentaEntradas extends JFrame {
 
         cargarPeliculas();
 
+        // Aplicar estilos
         Estilos.estiloPanel(panelPrincipal);
         Estilos.estiloBoton(botonVender);
         Estilos.aplicarEstiloVentana(this);
@@ -51,16 +61,14 @@ public class FormularioVentaEntradas extends JFrame {
         Estilos.estilizarComboBox(comboPeliculas);
         Estilos.estiloCampoTexto(campoCantidad);
 
-
-
         comboPeliculas.addActionListener(e -> cargarFunciones());
 
-        botonVender.addActionListener(e ->
-                venderEntradas());
+        botonVender.addActionListener(e -> venderEntradas());
 
-                new FormularioCRUTCajero(usuario).setVisible(true);
+        new FormularioCRUTCajero(usuario).setVisible(true); // Regresar al CRUD después de venta
     }
 
+    /** Carga todas las películas en el combo de selección */
     private void cargarPeliculas() {
         comboPeliculas.removeAllItems();
         for (Pelicula p : peliculaService.obtenerTodasLasPeliculas()) {
@@ -68,6 +76,7 @@ public class FormularioVentaEntradas extends JFrame {
         }
     }
 
+    /** Carga las funciones disponibles para la película seleccionada */
     private void cargarFunciones() {
         comboFunciones.removeAllItems();
         String titulo = (String) comboPeliculas.getSelectedItem();
@@ -81,6 +90,9 @@ public class FormularioVentaEntradas extends JFrame {
         }
     }
 
+    /**
+     * Registra la venta, genera boleto con código QR y guarda la imagen del boleto.
+     */
     private void venderEntradas() {
         if (!validarSeleccion()) return;
 
@@ -124,11 +136,9 @@ public class FormularioVentaEntradas extends JFrame {
                 Estilos.personalizarJOptionPane();
                 JOptionPane.showMessageDialog(panelPrincipal, "Venta registrada. Total: $" + total);
                 dispose();
-
             } else {
                 JOptionPane.showMessageDialog(panelPrincipal, "Error al registrar la venta.");
             }
-
 
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(panelPrincipal, "Error al procesar la fecha de la función.");
@@ -138,6 +148,11 @@ public class FormularioVentaEntradas extends JFrame {
         }
     }
 
+    /**
+     * Genera la informacion textual que se incrustará en el código QR.
+     * @param venta La venta a partir de la cual se genera el texto
+     * @return Cadena de texto con los datos de la venta
+     */
     private String comoTextoQR(Venta venta) {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return "Pelicula: " + venta.getPelicula() + "\n" +
@@ -147,7 +162,10 @@ public class FormularioVentaEntradas extends JFrame {
                 "Total: $" + venta.getTotal();
     }
 
-
+    /**
+     * Valida que una película y una función hayan sido seleccionadas.
+     * @return true si la selección es válida
+     */
     private boolean validarSeleccion() {
         String pelicula = (String) comboPeliculas.getSelectedItem();
         String funcion = (String) comboFunciones.getSelectedItem();
@@ -159,6 +177,10 @@ public class FormularioVentaEntradas extends JFrame {
         return true;
     }
 
+    /**
+     * Obtiene la cantidad de entradas ingresada en el campo de texto.
+     * @return Número de entradas o -1 si es inválido
+     */
     private int obtenerCantidadEntradas() {
         try {
             int cantidad = Integer.parseInt(campoCantidad.getText().trim());
@@ -170,19 +192,26 @@ public class FormularioVentaEntradas extends JFrame {
         }
     }
 
+    /**
+     * Calcula el precio total basado en la cantidad de entradas y tipo de sala.
+     * @param cantidad Cantidad de entradas
+     * @param tipoSala Tipo de sala (2D, 3D, VIP)
+     * @return Precio total
+     */
     private double calcularTotal(int cantidad, String tipoSala) {
         return cantidad * obtenerPrecioPorTipoSala(tipoSala);
     }
 
+    /**
+     * Genera un código QR y guarda una imagen del boleto con los datos incrustados.
+     * @param venta Venta que se convertirá en imagen con QR
+     */
     private void generarYGuardarQR(Venta venta) {
         try {
             String contenidoQR = venta.getCodigoQR();
             BufferedImage qr = QRUtil.generarQR(comoTextoQR(venta), 200, 350);
-
-            // Generar imagen completa
             BufferedImage boletoConQR = generarImagenBoletoConQR(venta, qr);
 
-            // Guardar como imagen PNG
             String nombreArchivo = "C:\\Users\\User\\Desktop\\Boleto" + System.currentTimeMillis() + ".png";
             ImageIO.write(boletoConQR, "png", new File(nombreArchivo));
             System.out.println("Boleto guardado en: " + nombreArchivo);
@@ -193,6 +222,11 @@ public class FormularioVentaEntradas extends JFrame {
         }
     }
 
+    /**
+     * Retorna el precio de entrada según el tipo de sala.
+     * @param tipo Tipo de sala
+     * @return Precio correspondiente
+     */
     private double obtenerPrecioPorTipoSala(String tipo) {
         switch (tipo.toUpperCase()) {
             case "2D": return 4.0;
@@ -202,6 +236,10 @@ public class FormularioVentaEntradas extends JFrame {
         }
     }
 
+    /**
+     * Muestra un boleto en pantalla con información textual y código QR.
+     * @param venta Objeto venta que contiene los datos del boleto
+     */
     private void generarBoleto(Venta venta) {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String contenidoQR = "Película: " + venta.getPelicula() + "\n" +
@@ -211,10 +249,8 @@ public class FormularioVentaEntradas extends JFrame {
                 "Total: $" + venta.getTotal() + "\n" +
                 "Fecha Venta: " + formato.format(venta.getFechaVenta());
 
-        // Generar imagen QR
-        BufferedImage imagenQR = QRUtil.generarCodigoQR(contenidoQR, 150, 150); // Asegúrate de tener esta clase
+        BufferedImage imagenQR = QRUtil.generarCodigoQR(contenidoQR, 150, 150);
 
-        // Crear mensaje de texto
         String boleto = "<html><body>" +
                 "<h3>BOLETO</h3>" +
                 "<p><strong>Película:</strong> " + venta.getPelicula() + "<br>" +
@@ -225,19 +261,21 @@ public class FormularioVentaEntradas extends JFrame {
                 "<strong>Fecha Venta:</strong> " + formato.format(venta.getFechaVenta()) + "</p>" +
                 "</body></html>";
 
-        // Mostrar mensaje con QR en JOptionPane
         JLabel etiqueta = new JLabel(boleto);
         JLabel imagen = new JLabel(new ImageIcon(imagenQR));
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(etiqueta, BorderLayout.CENTER);
-        panel.add(imagen, BorderLayout.SOUTH); // o SOUTH si quieres debajo
+        panel.add(imagen, BorderLayout.SOUTH);
         Estilos.estiloPanel(panel);
         Estilos.personalizarJOptionPane();
         JOptionPane.showMessageDialog(panelPrincipal, panel, "Boleto generado", JOptionPane.INFORMATION_MESSAGE);
     }
 
-
+    /**
+     * Devuelve el panel principal de la vista.
+     * @return panel principal
+     */
     public JPanel getPanel() {
         return panelPrincipal;
     }

@@ -13,15 +13,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Servicio que gestiona las ventas de entradas de cine.
+ */
 public class VentaService {
-
     private MongoCollection<Document> ventasCollection;
 
+    /**
+     * Inicializa la coleccion "Ventas".
+     */
     public VentaService() {
         MongoDatabase db = ConexionMongoDB.obtenerInstancia().getDatabase();
         ventasCollection = db.getCollection("Ventas");
     }
 
+    /**
+     * Registra una nueva venta.
+     *
+     * @param venta Venta a registrar.
+     * @return true si se inserto correctamente.
+     */
     public boolean registrarVenta(Venta venta) {
         try {
             Document doc = new Document("pelicula", venta.getPelicula())
@@ -30,7 +41,7 @@ public class VentaService {
                     .append("cantidadEntradas", venta.getCantidadEntradas())
                     .append("total", venta.getTotal())
                     .append("fechaVenta", venta.getFechaVenta())
-                    .append("usuario",venta.getUsuario())
+                    .append("usuario", venta.getUsuario())
                     .append("codigoQR", venta.getCodigoQR());
 
             ventasCollection.insertOne(doc);
@@ -41,22 +52,23 @@ public class VentaService {
         }
     }
 
+    /**
+     * Obtiene todas las ventas registradas.
+     *
+     * @return Lista de ventas.
+     */
     public List<Venta> obtenerTodasLasVentas() {
         List<Venta> lista = new ArrayList<>();
         try {
-            FindIterable<Document> documentos = ventasCollection.find();
-            for (Document doc : documentos) {
-                String pelicula = doc.getString("pelicula");
-                String sala = doc.getString("sala");
-
-                Date fechaHoraFuncion = doc.getDate("fechaHoraFuncion"); // ¡Nombre correcto!
-                int cantidad = doc.getInteger("cantidadEntradas", 0);
-                double total = doc.getDouble("total");
-
-                Date fechaVenta = doc.getDate("fechaVenta");
-                String usuario = doc.getString("usuario");
-
-                lista.add(new Venta(pelicula, sala, fechaHoraFuncion, cantidad, total, fechaVenta, usuario));
+            for (Document doc : ventasCollection.find()) {
+                lista.add(new Venta(
+                        doc.getString("pelicula"),
+                        doc.getString("sala"),
+                        doc.getDate("fechaHoraFuncion"),
+                        doc.getInteger("cantidadEntradas", 0),
+                        doc.getDouble("total"),
+                        doc.getDate("fechaVenta"),
+                        doc.getString("usuario")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,22 +76,25 @@ public class VentaService {
         return lista;
     }
 
-
+    /**
+     * Obtiene las ventas realizadas por un usuario.
+     *
+     * @param nombreUsuario Usuario a consultar.
+     * @return Lista de ventas.
+     */
     public List<Venta> obtenerVentasPorUsuario(String nombreUsuario) {
         List<Venta> lista = new ArrayList<>();
         try {
-            Bson filtro = Filters.eq("usuario", nombreUsuario);
-            FindIterable<Document> documentos = ventasCollection.find(filtro);
+            FindIterable<Document> documentos = ventasCollection.find(Filters.eq("usuario", nombreUsuario));
             for (Document doc : documentos) {
-                String pelicula = doc.getString("pelicula");
-                String sala = doc.getString("sala");
-                Date fechaHora = doc.getDate("fechaHora");
-                int cantidad = doc.getInteger("cantidadEntradas", 0);
-                double total = doc.getDouble("total");
-                String usuario = doc.getString("usuario");
-                Date fechaVenta = doc.getDate("fechaVenta"); // <-- NUEVO
-
-                lista.add(new Venta(pelicula, sala, fechaHora, cantidad, total, fechaVenta));
+                lista.add(new Venta(
+                        doc.getString("pelicula"),
+                        doc.getString("sala"),
+                        doc.getDate("fechaHoraFuncion"),
+                        doc.getInteger("cantidadEntradas", 0),
+                        doc.getDouble("total"),
+                        doc.getDate("fechaVenta"),
+                        doc.getString("usuario")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,3 +102,4 @@ public class VentaService {
         return lista;
     }
 }
+

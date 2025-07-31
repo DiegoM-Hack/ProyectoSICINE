@@ -1,5 +1,8 @@
 package Modelos;
 
+/**
+ * Representa una pelicula en el sistema.
+ */
 public class Pelicula {
     private String titulo;
     private String genero;
@@ -8,9 +11,18 @@ public class Pelicula {
     private String sinopsis;
     private String director;
     private int anio;
-    //private String rutaImagen;  // NUEVO
 
-    // Constructor actualizado
+    /**
+     * Constructor para crear una nueva pelicula.
+     *
+     * @param titulo Titulo de la película.
+     * @param genero Género de la película.
+     * @param duracion Duracion en minutos.
+     * @param clasificacion Clasificacion por edades.
+     * @param sinopsis Resumen de la trama.
+     * @param director Nombre del director.
+     * @param anio Año de estreno.
+     */
     public Pelicula(String titulo, String genero, int duracion, String clasificacion,
                     String sinopsis, String director, int anio) {
         this.titulo = titulo;
@@ -20,10 +32,8 @@ public class Pelicula {
         this.sinopsis = sinopsis;
         this.director = director;
         this.anio = anio;
-
     }
 
-    // Getters y Setters
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
 
@@ -44,5 +54,4 @@ public class Pelicula {
 
     public int getAnio() { return anio; }
     public void setAnio(int anio) { this.anio = anio; }
-
 }

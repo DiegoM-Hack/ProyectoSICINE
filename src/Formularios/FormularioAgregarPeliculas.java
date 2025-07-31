@@ -9,8 +9,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Clase que representa el formulario para agregar peliculas al sistema PoliCine.
+ * Permite ingresar los datos de una pelicula y guardarla en la base de datos.
+ */
 public class FormularioAgregarPeliculas extends JFrame {
-
     private Usuario usuario;
     private JPanel principal;
     private JTextField titulo;
@@ -18,19 +21,21 @@ public class FormularioAgregarPeliculas extends JFrame {
     private JTextField duracion;
     private JTextField clasificacion;
     private JTextField sipnopsis;
-    private JTextField año;
+    private JTextField ano;
     private JTextField directort;
     private JButton guardarButton;
     private JButton cancelarButton;
     private JButton buscarButton;
 
+    /**
+     * Constructor del formulario que recibe el usuario autenticado y configura la interfaz.
+     * @param usuario Usuario que ingreso al sistema
+     */
     public FormularioAgregarPeliculas(Usuario usuario) {
         this.usuario = usuario;
-        setTitle("Agregar Película");
+        setTitle("Agregar Pelicula");
 
-
-
-        // Aplicar estilos
+        // Aplicar estilos visuales
         Estilos.estiloPanel(principal);
         Estilos.estiloBoton(guardarButton);
         Estilos.estiloBoton(cancelarButton);
@@ -41,45 +46,35 @@ public class FormularioAgregarPeliculas extends JFrame {
         Estilos.estiloCampoTexto(duracion);
         Estilos.estiloCampoTexto(clasificacion);
         Estilos.estiloCampoTexto(sipnopsis);
-        Estilos.estiloCampoTexto(año);
+        Estilos.estiloCampoTexto(ano);
         Estilos.estiloCampoTexto(directort);
 
-
-        this.usuario = usuario;
-
-        setTitle("Agregar Película");
         setSize(400, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setContentPane(principal);
         setVisible(true);
 
-
-
-        // Acción guardar
+        // Accion guardar
         guardarButton.addActionListener(e -> guardarPelicula());
 
-        // Acción cancelar
+        // Accion cancelar
         cancelarButton.addActionListener(e -> {
             dispose();
             new FormularioCRUD(usuario);
         });
 
-        principal.setPreferredSize(new Dimension(700, 350)); // o el tamaño que desees
-        setContentPane(principal);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        pack(); // ajusta la ventana al tamaño preferido del contenido
-        setLocationRelativeTo(null); // centrar
-        setVisible(true);
-        buscarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                new BuscarPelicula(usuario);
-            }
+        // Accion buscar
+        buscarButton.addActionListener(e -> {
+            dispose();
+            new BuscarPelicula(usuario);
         });
     }
 
+    /**
+     * Metodo que obtiene los datos del formulario, crea un objeto Pelicula
+     * y lo guarda en la base de datos.
+     */
     private void guardarPelicula() {
         try {
             String t = titulo.getText();
@@ -88,28 +83,30 @@ public class FormularioAgregarPeliculas extends JFrame {
             String c = clasificacion.getText();
             String s = sipnopsis.getText();
             String dir = directort.getText();
-            int an = Integer.parseInt(año.getText());
+            int an = Integer.parseInt(ano.getText());
 
             Pelicula peli = new Pelicula(t, g, d, c, s, dir, an);
             PeliculaService servicio = new PeliculaService();
             servicio.insertarPelicula(peli);
 
-            Estilos.personalizarJOptionPane(); // aplicar estilo antes del mensaje
-            JOptionPane.showMessageDialog(this, "Película guardada con éxito.");
+            Estilos.personalizarJOptionPane();
+            JOptionPane.showMessageDialog(this, "Pelicula guardada con exito.");
             limpiarFormulario();
             dispose();
             new FormularioCRUD(usuario);
-    }catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             Estilos.personalizarJOptionPane();
-            JOptionPane.showMessageDialog(this, "Error: duración y año deben ser numéricos.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error: duracion y anio deben ser numericos.", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             ex.printStackTrace();
             Estilos.personalizarJOptionPane();
-            JOptionPane.showMessageDialog(this, "Ocurrió un error al guardar la película.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al guardar la pelicula.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-
+    /**
+     * Limpia todos los campos del formulario
+     */
     private void limpiarFormulario() {
         titulo.setText("");
         genero.setText("");
@@ -117,11 +114,14 @@ public class FormularioAgregarPeliculas extends JFrame {
         clasificacion.setText("");
         sipnopsis.setText("");
         directort.setText("");
-        año.setText("");
+        ano.setText("");
     }
 
+    /**
+     * Retorna el panel principal para integracion externa
+     * @return panel principal del formulario
+     */
     public JPanel getPanel() {
         return principal;
     }
-
 }

@@ -6,6 +6,11 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.net.URL;
 
+/**
+ * Clase Estilos proporciona un conjunto de utilidades estéticas reutilizables
+ * para personalizar la apariencia visual de componentes Swing en el sistema PoliCine.
+ * Aplica una paleta de colores oscuros con detalles rojos y tipografía consistente.
+ */
 public class Estilos {
 
     // Colores y fuentes centrales
@@ -44,7 +49,10 @@ public class Estilos {
         boton.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
     }
 
-    // Estilo para campos de texto (JTextField, JPasswordField, etc.)
+    /**
+     * Aplica estilo a campos de texto como JTextField o JPasswordField.
+     * @param campo el campo de texto
+     */
     public static void estiloCampoTexto(JTextComponent campo) {
         campo.setBackground(new Color(40, 40, 40));
         campo.setForeground(Color.WHITE);
@@ -53,7 +61,10 @@ public class Estilos {
         campo.setBorder(BorderFactory.createLineBorder(COLOR_BOTON));
     }
 
-    // Aplicar estilo visual a una ventana JFrame
+    /**
+     * Aplica estilo general a una ventana (JFrame): icono, barra superior.
+     * @param frame la ventana a personalizar
+     */
     public static void aplicarEstiloVentana(JFrame frame) {
         // Cambia el ícono (usa un archivo en /resources/icono.png)
         ImageIcon icono = new ImageIcon(Estilos.class.getResource("/Img/buho2.png"));
@@ -65,7 +76,12 @@ public class Estilos {
         UIManager.put("activeCaptionText", COLOR_TEXTO);
     }
 
-    // Estilo personalizado para etiquetas (labels) si no se hace en estiloPanel
+    /**
+     * Estiliza etiquetas (JLabel) dentro de un panel recursivamente.
+     * @param panel panel que contiene etiquetas
+     * @param color color del texto
+     * @param fuente fuente a aplicar
+     */
     public static void estilizarLabels(JPanel panel, Color color, Font fuente) {
         for (Component comp : panel.getComponents()) {
             if (comp instanceof JLabel label) {
@@ -94,7 +110,11 @@ public class Estilos {
         UIManager.put("OptionPane.questionIcon", cargarIconoEscalado("/Img/interrogacion.png"));
     }
 
-    // Metodo para escalar los íconos
+    /**
+     * Escala y retorna un icono personalizado.
+     * @param ruta ruta del recurso en el proyecto
+     * @return el icono escalado
+     */
     private static Icon cargarIconoEscalado(String ruta) {
         URL url = Estilos.class.getResource(ruta);
         if (url != null) {
@@ -105,6 +125,10 @@ public class Estilos {
         return null; // Fallback en caso de que no se encuentre el recurso
     }
 
+    /**
+     * Aplica estilo personalizado a una tabla.
+     * @param tabla tabla a estilizar
+     */
     public static void estiloTabla(JTable tabla) {
         tabla.setFont(new Font("Arial", Font.PLAIN, 13));
         tabla.setForeground(Color.WHITE);
@@ -130,9 +154,10 @@ public class Estilos {
         }
     }
 
-
-
-
+    /**
+     * Aplica estilo personalizado a un JComboBox.
+     * @param comboBox ComboBox a estilizar
+     */
     // En tu clase Estilos
     public static void estilizarComboBox(JComboBox<String> comboBox) {
         comboBox.setBackground(new Color(30, 30, 30));

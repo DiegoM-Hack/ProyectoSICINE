@@ -10,16 +10,26 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
+/**
+ * Servicio para gestionar salas de cine.
+ */
 public class SalaService {
     private MongoCollection<Document> salasCollection;
-    private static MongoCollection<Document> salasCollection2;
 
+    /**
+     * Constructor que inicializa la coleccion "Salas".
+     */
     public SalaService() {
         MongoDatabase database = ConexionMongoDB.obtenerInstancia().getDatabase();
         salasCollection = database.getCollection("Salas");
-        salasCollection2 = database.getCollection("Salas");
     }
 
+    /**
+     * Inserta una nueva sala en la base de datos.
+     *
+     * @param sala Objeto Sala.
+     * @return true si fue insertada correctamente.
+     */
     public boolean agregarSala(Sala sala) {
         try {
             Document doc = new Document("nombre", sala.getNombre())
@@ -33,29 +43,35 @@ public class SalaService {
         }
     }
 
+    /**
+     * Retorna todas las salas registradas.
+     *
+     * @return Lista de salas.
+     */
     public List<Sala> obtenerTodasLasSalas() {
         List<Sala> lista = new ArrayList<>();
         for (Document doc : salasCollection.find()) {
-            String nombre = doc.getString("nombre");
-            int asientos = doc.getInteger("numeroAsientos", 0);
-            String tipo = doc.getString("tipo");
-
-            lista.add(new Sala(nombre, asientos, tipo));
+            lista.add(new Sala(
+                    doc.getString("nombre"),
+                    doc.getInteger("numeroAsientos", 0),
+                    doc.getString("tipo")));
         }
         return lista;
     }
 
-
-
-
-
+    /**
+     * Busca una sala por su nombre.
+     *
+     * @param nombreSala Nombre de la sala.
+     * @return Sala encontrada o null si no existe.
+     */
     public Sala obtenerSalaPorNombre(String nombreSala) {
         Document doc = salasCollection.find(eq("nombre", nombreSala)).first();
         if (doc != null) {
-            String nombre = doc.getString("nombre");
-            int asientos = doc.getInteger("numeroAsientos", 0);
-            String tipo = doc.getString("tipo");
-            return new Sala(nombre, asientos, tipo);
+            return new Sala(
+                    doc.getString("nombre"),
+                    doc.getInteger("numeroAsientos", 0),
+                    doc.getString("tipo"));
         }
         return null;
     }

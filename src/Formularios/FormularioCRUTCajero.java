@@ -7,7 +7,12 @@ import javax.swing.*;
 import java.awt.*;
 
 
+/**
+ * Clase FormularioCRUTCajero representa el menú principal de funcionalidades disponibles para un cajero.
+ * Desde aquí se puede acceder a ver funciones, vender entradas, consultar historial de ventas o cerrar sesión.
+ */
 public class FormularioCRUTCajero extends JFrame {
+
     private JPanel panelPrincipal;
     private JLabel nombreCajeroLabel;
     private JButton buscarFuncionesButton;
@@ -17,6 +22,11 @@ public class FormularioCRUTCajero extends JFrame {
 
     private Usuario usuario;
 
+    /**
+     * Constructor que inicializa el menú del cajero y aplica los estilos visuales y eventos.
+     *
+     * @param usuario Usuario autenticado con rol de cajero
+     */
     public FormularioCRUTCajero(Usuario usuario) {
         this.usuario = usuario;
 
@@ -26,34 +36,34 @@ public class FormularioCRUTCajero extends JFrame {
         setSize(500, 200);
         setLocationRelativeTo(null);
 
+        // Aplicar estilos visuales personalizados
         Estilos.estiloPanel(panelPrincipal);
         Estilos.estiloBoton(salirButton);
         Estilos.aplicarEstiloVentana(this);
         Estilos.estilizarLabels(panelPrincipal, Color.WHITE, new Font("Arial", Font.BOLD, 14));
 
-
         // Mostrar el nombre del cajero
         nombreCajeroLabel.setText("Cajero: " + usuario.getUsuario());
 
-        // BOTÓN: Ver funciones
+        // Botón para ver funciones
         buscarFuncionesButton.addActionListener(e -> {
             dispose(); // Cierra esta ventana
-            new VerFuncionesPanel(usuario); // Asegúrate de que VerFuncionesPanel es JFrame
+            new VerFuncionesPanel(usuario); // Abre panel de funciones
         });
 
-        // BOTÓN: Vender entradas
+        // Botón para vender entradas
         venderEntradasButton.addActionListener(e -> {
             dispose(); // Cierra esta ventana
-            new FormularioVentaEntradas(usuario).setVisible(true); // Asegúrate de que este también hereda de JFrame
+            new FormularioVentaEntradas(usuario).setVisible(true); // Abre formulario de venta
         });
 
-        //  BOTÓN: Historial de ventas
+        // Botón para ver historial de ventas
         historialVentasButton.addActionListener(e -> {
             dispose();
             new HistorialVentas(usuario).setVisible(true);
         });
 
-        //  BOTÓN: Salir (volver al login)
+        // Botón para salir (cerrar sesión y volver al login)
         salirButton.addActionListener(e -> {
             int opcion = JOptionPane.showConfirmDialog(
                     panelPrincipal,
@@ -63,14 +73,20 @@ public class FormularioCRUTCajero extends JFrame {
             );
 
             if (opcion == JOptionPane.YES_OPTION) {
-                JFrame login = new Login(); // Asegúrate de que Login es JFrame
+                JFrame login = new Login(); // Volver al login
                 login.setVisible(true);
                 dispose(); // Cierra esta ventana actual
             }
         });
     }
 
+    /**
+     * Devuelve el panel principal (util para integraciones o pruebas).
+     *
+     * @return panel principal del formulario
+     */
     public JPanel getPanel() {
         return panelPrincipal;
     }
 }
+
